@@ -75,4 +75,40 @@ public:
 private:
     bool errorInput = false;
 };
+
+//将数组的奇数放在前部分，偶数放在后部分，顺序不变，解法一。
+class Solution {
+public:
+    void reOrderArray(vector<int> &array) {
+        int size = array.size();
+        int left = 0;
+        int right = size - 1;
+        int oddCount = 0;
+        vector<int> new_array(size, 0);
+        int index = 0;
+        for(int i = 0; i < size; i++)
+        {
+            if(array[i] % 2 != 0)
+            {
+                oddCount++;
+            }
+        }
+        for(int j = 0; j < size; j++)
+        {
+            if(array[j] % 2 != 0)
+            {
+                new_array[index++] = array[j];
+
+            }
+            else
+            {
+                new_array[oddCount++] = array[j];
+            }
+        }
+        for(int m = 0; m < size; m++)
+        {
+            array[m] = new_array[m];
+        }
+    }
+};
 #endif
