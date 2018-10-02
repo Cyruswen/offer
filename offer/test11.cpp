@@ -99,3 +99,233 @@ public:
     }
 };
 #endif
+
+#if 0
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+        }
+};
+
+class Solution {
+public:
+    ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+        if(pListHead == NULL)
+        {
+            return NULL;
+        }
+        ListNode* cur = pListHead;
+        size_t len = 0;
+        while(cur != NULL)
+        {
+            len++;
+            cur = cur->next;
+        }
+        if(k > len)
+        {
+            return NULL;
+        }
+        ListNode* fast = pListHead;
+        ListNode* slow = pListHead;
+        for(size_t i = 0; i < k-1; i++)
+        {
+            fast = fast->next;
+        }
+        while(fast->next != NULL)
+        {
+            fast = fast->next;
+            slow = slow->next;
+        }
+        return slow;
+    }
+
+};
+#endif
+
+#if 0
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+        }
+};
+
+class Solution {
+public:
+    ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+        if(pListHead == NULL)
+            return NULL;
+        ListNode* cur = pListHead;
+        while(cur != NULL)
+        {
+            len++;
+            cur = cur->next;
+        }
+        if(k > len || k <= 0)
+            return NULL;
+        stack<ListNode*> s;
+        cur = pListHead;
+        while(cur != NULL)
+        {  
+            s.push(cur);
+            cur = cur->next;
+        }
+        for(size_t i = 1; i < k; i++)
+        {
+            s.pop();
+        }
+        return s.top();
+    }
+private:
+    size_t len = 0;
+};
+#endif
+
+#if 0
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+        }
+};
+
+class Solution {
+public:
+    ListNode* ReverseList(ListNode* pHead) {
+        if(pHead == NULL)
+            return NULL;
+        ListNode* cur = pHead;
+        ListNode* Next = NULL;
+        while(cur->next != NULL)
+        {
+            Next = cur->next;
+            cur->next = Next->next;
+            Next->next = pHead;
+            pHead = Next;
+        }
+        return pHead;
+    }
+};
+#endif
+
+#if 0
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+        }
+};
+
+class Solution {
+public:
+    ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+    {
+        if(pHead1 == NULL && pHead2 != NULL)
+            return pHead2;
+        else if(pHead1 != NULL && pHead2 == NULL)
+            return pHead1;
+        else if(pHead1 == NULL && pHead2 == NULL)
+            return NULL;
+        ListNode* newHead;
+        ListNode* cur1 = pHead1;
+        ListNode* cur2 = pHead2;
+        if(cur1->val >= cur2->val)
+        {     
+            newHead = cur2;
+            cur2 = cur2->next;
+        }
+        else
+        { 
+            newHead = cur1;
+            cur1 = cur1->next;
+        }
+        ListNode* cur3 = newHead;
+        while(cur1 != NULL && cur2 != NULL)
+        {
+            if(cur1->val >= cur2->val)
+            {
+                cur3->next = cur2;
+                cur3 = cur3->next;
+                cur2 = cur2->next;
+
+            }
+            else
+            {
+                cur3->next = cur1;
+                cur3 = cur3->next;
+                cur1 = cur1->next;
+            }
+        }
+        if(cur1 == NULL)
+            cur3->next = cur2;
+        else
+            cur3->next = cur1;
+        return newHead;
+    }
+
+};
+#endif
+
+#if 1
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+        }
+};
+
+class Solution {
+public:
+    ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+    {
+        if(pHead1 == NULL && pHead2 != NULL)
+            return pHead2;
+        else if(pHead2 == NULL && pHead1 != NULL)
+            return pHead1;
+        else if(pHead1 == NULL && pHead2 == NULL)
+            return NULL;
+        ListNode* cur1 = pHead1;
+        ListNode* cur2 = pHead2;
+        ListNode* newPhead = new ListNode(0);
+        ListNode* cur3 = newPhead;
+        while(cur1 != NULL && cur2 != NULL)
+        {
+            if(cur1->val > cur2->val)
+            {
+                cur3->next = new ListNode(cur2->val);
+                cur3 = cur3->next;
+                cur2 = cur2->next;
+            }
+            else
+            {
+                cur3->next = new ListNode(cur1->val);
+                cur3 = cur3->next;
+                cur1 = cur1->next;
+            }
+        }
+        if(cur1 == NULL)
+        {
+            cur3->next = cur2;
+        }
+        else if(cur2 == NULL)
+        {
+            cur3->next = cur1;
+        }
+        ListNode* tmp = newPhead;
+        newPhead = newPhead->next;
+        delete tmp;
+        return newPhead;
+    }
+};
+#endif
