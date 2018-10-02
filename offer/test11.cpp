@@ -1,4 +1,6 @@
 #include <iostream>
+#include <queue>
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <map>
@@ -275,7 +277,7 @@ public:
 };
 #endif
 
-#if 1
+#if 0
 
 struct ListNode {
     int val;
@@ -328,4 +330,74 @@ public:
         return newPhead;
     }
 };
+#endif
+
+#if 0
+
+bool cmp(int a, int b)
+{
+    return a > b;
+}
+
+int main(){
+    int arr[] = {5,3,2,6,1,8,7};
+    size_t size = sizeof(arr)/sizeof(int);
+    vector<int> v(arr, arr+size);
+    sort(v.begin(), v.end(), cmp);
+    for(size_t i = 0; i < v.size(); i++)
+    {
+        cout<<v[i]<<" ";
+    }
+    cout<<endl;
+}
+#endif
+
+#if 1
+
+struct student
+{
+public:
+    student(int a, int b)
+    :_id(a),_age(b)
+    {}
+
+public:
+    int _id;
+    int _age;
+};
+
+class cmp
+{
+public:
+    bool operator()(student& a, student& b)
+    {
+        return a._id > b._id;
+    }
+};
+
+
+int main()
+{
+    /*int arr[] = {4,3,2,6,5,1,9,8};
+    size_t size = sizeof(arr)/sizeof(int);
+    vector<int> v(arr, arr+size);
+    priority_queue<int, vector<int>, cmp> p;
+    for(size_t i = 0; i < v.size(); i++)
+    {
+        p.push(v[i]);
+    }*/
+    student* a = new student(1, 17);
+    student* b = new student(18, 30);
+    student* c = new student(9, 8);
+    priority_queue<student, vector<student>, cmp> p;
+    p.push(*a);
+    p.push(*b);
+    p.push(*c);
+    while(!p.empty())
+    {
+        cout<<"id="<<p.top()._id<<" "<<"age="<<p.top()._age<<endl;
+        p.pop();
+    }
+    return 0;
+}
 #endif
