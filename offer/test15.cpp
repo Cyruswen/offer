@@ -1,4 +1,8 @@
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
+#include <queue>
+#include <unistd.h>
 #include <stack>
 #include <string>
 #include <vector>
@@ -113,7 +117,7 @@ int main()
 }
 #endif
 
-#if 1
+#if 0
 class Solution {
 public:
     bool IsPopOrder(vector<int> pushV,vector<int> popV) {
@@ -136,4 +140,239 @@ public:
             return false;
     }
 };
+#endif
+
+#if 0
+//非递归
+//判断以序列是不是二叉搜索树的后序遍历结果。
+class Solution {
+public:
+    bool VerifySquenceOfBST(vector<int> sequence) {
+        size_t size = sequence.size()-1;
+        if(size == 0)
+            return false;
+        while(size--)
+        {
+            size_t i = 0;
+            while(sequence[i++] < sequence[size]);
+            while(sequence[i++] > sequence[size]);
+            if(i < size)
+                return false;
+        }
+        return true;
+    }
+};
+#endif
+
+#if 0
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+        val(x), left(NULL), right(NULL) {
+        }
+};
+
+class Solution {
+public:
+    vector<vector<int> > Print(TreeNode* pRoot) {
+        vector<vector<int> > result;
+        if(pRoot == NULL)
+            return result;
+        queue<TreeNode*> q;
+        q.push(pRoot);
+        vector<int> v;
+        while(!q.empty())
+        {
+            size_t hi = q.size();
+            for(size_t i = 0; i < hi; i++)
+            { 
+                TreeNode* tmp = q.front();
+                q.pop();
+                v.push_back(tmp->val);
+                if(tmp->left)
+                    q.push(tmp->left);
+                if(tmp->right)
+                    q.push(tmp->right);
+            }
+            result.push_back(v);
+            v.clear();
+        }
+        return result;
+    }
+};
+
+int main()
+{
+
+    TreeNode* root = new TreeNode(1);
+    TreeNode* node1 = new TreeNode(2);
+    TreeNode* node2 = new TreeNode(3);
+    TreeNode* node3 = new TreeNode(4);
+    TreeNode* node4 = new TreeNode(5);
+    TreeNode* node5 = new TreeNode(6);
+    TreeNode* node6 = new TreeNode(7);
+    root->left = node1;
+    root->right = node2;
+    node1->left = node3;
+    node1->right = node4;
+    node2->left = node5;
+    node2->right = node6;
+    Solution a;
+    a.Print(root);
+    return 0;
+}
+#endif
+
+#if 0   
+以下是错误代码      自行略过。
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+        val(x), left(NULL), right(NULL) {
+        }
+};
+
+class Solution {
+public:
+    vector<vector<int> > Print(TreeNode* pRoot) {
+        vector<vector<int> > result;
+        if(pRoot == NULL)
+            return result;
+        s1.push(pRoot);
+        vector<int> v;
+        while(!s1.empty() || !s2.empty())
+        {
+            v.clear();
+            while(!s1.empty())
+            {
+                TreeNode* tmp = s1.top();
+                s1.pop();
+                v.push_back(tmp->val);
+                if(tmp->right)
+                    s2.push(tmp->right);
+                if(tmp->left)
+                    s2.push(tmp->left);
+            }
+            if(!v.empty())
+                result.push_back(v);
+            v.clear();
+            while(!s2.empty())
+            {
+                TreeNode* tmp = s2.top();
+                s2.pop();
+                v.push_back(tmp->val);
+                if(tmp->right)
+                    s1.push(tmp->right);
+                if(tmp->left)
+                    s1.push(tmp->left);
+            }
+            if(!v.empty())
+                result.push_back(v);
+        }
+        return result;
+    }
+private:
+    stack<TreeNode*> s1;
+    stack<TreeNode*> s2;
+};
+#endif
+
+#if 0
+
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+        val(x), left(NULL), right(NULL) {
+        }
+};
+
+class Solution {
+public:
+    vector<vector<int> > FindPath(TreeNode* root,int expectNumber) {
+        if(root)
+            isPath(root, expectNumber);
+        return result;
+    }
+
+private:
+    void isPath(TreeNode* node, int left)
+    {
+        tmp.push_back(node->val);
+        if(left - node->val == 0 && node->left == NULL && node->right == NULL)
+            result.push_back(tmp);
+        else
+        { 
+            if(node->left)
+                isPath(node->left, left-node->val);
+            if(node->right)
+                isPath(node->right, left- node->val);
+        }
+        tmp.pop_back();
+    }
+
+private:
+    vector<vector<int> > result;
+    vector<int> tmp;
+
+};
+#endif
+
+#if 0
+struct TreeNode
+{
+    int val;
+    TreeNode* left = NULL;
+    TreeNode* right = NULL;
+    TreeNode(int x)
+        :val(x)
+    {}
+};
+
+class Solution
+{
+public:
+    vector<vector<int> > FindPath(TreeNode* root,int expectNumber) {
+        if(root)
+            isPath(root, expectNumber);
+        return result;
+    }
+
+private:
+    void isPath(TreeNode* node, int left)
+    {
+        tmp.push_back(node->val);
+        if(left - node->val == 0 && !node->left && !node->right)
+            result.push_back(tmp);
+        if(node->left)
+            isPath(node->left, left - node->val);
+        if(node->right)
+            isPath(node->right, left - node->val);
+        tmp.pop_back();
+    }
+
+private:
+    vector<vector<int> > result;
+    vector<int> tmp;
+};
+#endif
+
+#if 0
+//生成随机数的函数
+int main()
+{
+    srand(time(0));
+    for(;;) 
+    {
+        cout<<"time(0): "<<time(0)<<" ";
+        cout<<"生成随机数："<<rand()%10 + 1<<endl;
+        sleep(1);
+    }
+    return 0;
+}
 #endif
