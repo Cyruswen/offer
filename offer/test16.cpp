@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map>
 #include <stack>
 #include <vector>
 #include <string>
@@ -101,4 +102,35 @@ public:
     }
 
 };
+#endif
+
+#if 0
+class Solution {
+public:
+    int MoreThanHalfNum_Solution(vector<int> numbers) {
+        int len = numbers.size();
+        if(len == 0)
+            return 0;
+        map<int,int> m;
+        for(int i = 0; i < len;i++)
+            m[numbers[i]]++;
+        for(int i = 0; i < len; i++)
+            if(m[numbers[i]] > len/2)
+                return numbers[i];
+        return 0;
+    }
+};
+#endif
+
+#if 1
+int main()
+{
+    int a = 0;
+    long b = 0;
+    size_t c = 0;
+    long long d = 0;
+    double e = 1.0;
+    cout<<"a "<<sizeof(a)<<" b "<<sizeof(b)<<" c "<<sizeof(c)<<" d "<<sizeof(d)<<" e "<<sizeof(e)<<" "<<endl;
+    return 0;
+}
 #endif
