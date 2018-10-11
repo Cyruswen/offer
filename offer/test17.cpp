@@ -506,6 +506,76 @@ public:
        }
        cout<<endl;
    }
+   //求二叉树的高度
+   int depth(TreeNode* root)
+   {
+       if(root == NULL)
+           return 0;
+       int left = depth(root->left);
+       int right = depth(root->right);
+       return left > right ? left+1 : right+1;
+   }
+   //判断一颗二叉树是不是平衡二叉树
+   void isBalanced(TreeNode* root)
+   {
+       if(root == NULL)
+           return;
+       if(_isBalanced(root))
+           cout<<"该树是平衡二叉树"<<endl;
+       else
+           cout<<"该树不是平衡二叉树"<<endl;
+   }
+
+   //查找一颗二叉树路径和为sum的路径
+   void findWay(TreeNode* root, int sum)
+   {
+        if(root == NULL)
+            return;
+        _findWay(root ,sum);
+        cout<<"和为sum的路径有："<<endl;
+        printResult();
+   }
+
+
+private:
+   bool _isBalanced(TreeNode* root)
+   {
+       if(root == NULL)
+           return true;
+       int left = depth(root->left);
+       int right = depth(root->right);
+       int diff = left - right;
+       if(diff > 1 || diff < -1)
+           return false;
+       return _isBalanced(root->left) && _isBalanced(root->right);
+   }
+
+   void _findWay(TreeNode* root, int left)
+   {
+       tmp.push_back(root->val);
+       if(left - root->val == 0 && root->left == NULL && root->right == NULL)
+           result.push_back(tmp);
+       if(root->left)
+           _findWay(root->left, left - root->val);
+       if(root->right)
+           _findWay(root->right, left - root->val);
+       tmp.pop_back();
+   }
+    
+   void printResult()
+   {
+       for(size_t i = 0; i < result.size(); i++)
+       {
+           for(size_t j = 0; j < result[i].size(); j++)
+               cout<<result[i][j]<<" ";
+           cout<<" ";
+       }
+       cout<<endl;
+   }
+
+private:
+   vector<int> tmp;
+   vector<vector<int> > result;
 };
 
 
@@ -514,14 +584,16 @@ int main()
     TreeNode* root = new TreeNode(1);
     TreeNode* node1 = new TreeNode(2);
     TreeNode* node2 = new TreeNode(3);
-    TreeNode* node3 = new TreeNode(4);
+    TreeNode* node3 = new TreeNode(14);
     TreeNode* node4 = new TreeNode(5);
     TreeNode* node5 = new TreeNode(6);
     TreeNode* node6 = new TreeNode(7);
     root->left = node1;
-    root->right = node2;
+    //root->right = node2;
+    root->right = NULL;
     node1->left = node3;
     node1->right = node4;
+    node4->left = node2;
     node2->left = node5;
     node2->right = node6;
     Solution a;
@@ -535,6 +607,10 @@ int main()
     a.levePrint(root);
     cout<<"之字遍历："<<endl;
     a.zPrint(root);
+    cout<<"高度为："<<endl;
+    cout<<a.depth(root)<<endl;
+    a.isBalanced(root);
+    a.findWay(root, 17);
     return 0;
 }
 #endif
