@@ -1105,3 +1105,286 @@ public:
 };
 ```
 
+25. 树的z形遍历
+
+思路：两个栈，一个从左往右，一个从右往左入，谁空入谁，直到两个都空。
+
+```C++
+    void zPrint(TreeNode* root)
+    {
+        if(root == NULL)
+            return;
+        stack<TreeNode*> s1;
+        stack<TreeNode*> s2;
+        s1.push(root);
+        while(!s1.empty() || !s2.empty())
+        {
+            while(!s1.empty())
+            { 
+                TreeNode* tmp = s1.top();
+                cout<<tmp->val<<" ";
+                s1.pop();
+                if(tmp->pleft)
+                    s2.push(tmp->pleft);
+                if(tmp->pright)
+                    s2.push(tmp->pright);
+            }
+            while(!s2.empty())
+            {
+                TreeNode* tmp = s2.top();
+                cout<<tmp->val<<" ";
+                s2.pop();
+                if(tmp->pright)
+                    s1.push(tmp->pright);
+                if(tmp->pleft)
+                    s1.push(tmp->pleft);
+            }
+        }
+        cout<<endl;
+    }
+};
+```
+
+26. 包含min函数的栈
+
+    思路：设置两个栈，其中一个栈存元素，一个栈存最小值。每次入栈，如果stack2为空，stack1和stack2同时入栈。如果stack2不为空,判断入栈元素小于stack2栈顶元素，两个栈同时入栈。否则只如stack1.
+
+    出栈的时候，判断两栈顶是否相等，如果相等，同时出栈，否则只出stack1;
+
+    ```c++
+    class Solution {
+    public:
+        void push(int value) {
+            if(stack2.empty())
+                stack2.push(value);
+            else if(stack2.top() > value)
+                stack2.push(value);
+            stack1.push(value);
+        }
+        void pop() {
+            if(stack1.top() == stack2.top())
+            {
+                stack1.pop();
+                stack2.pop();
+            }
+            else
+                stack1.pop();
+        }
+        int top() {
+            return stack1.top();
+        }
+        int min() {
+            return stack2.top();
+        }
+    private:
+        stack<int> stack1;
+        stack<int> stack2;
+    };
+    ```
+
+27. 搜索二叉树的后序遍历。
+
+    思路：二叉搜索树的后序遍历最后一个数是根节点，从前往后遍历前面一定小于它，后面部分一定都大于它。
+
+    那么从头到尾走一遍，如果每次i都能到达最后一个节点，那么这个序列就是二叉搜索树的后序遍历结果。
+
+    ```c++
+    class Solution {
+    public:
+        bool VerifySquenceOfBST(vector<int> sequence) {
+            int size = sequence.size();
+            if(size == 0)
+                return false;
+            while(--size)
+            {
+                int i = 0;
+                while(sequence[i++] < sequence[size]);
+                while(sequence[i++] > sequence[size]);
+                if(i < size)
+                    return false;
+            }
+            return true;
+        }
+    };            
+    ```
+
+28. 二叉树的层序遍历
+
+    思路，一个队列，先将头节点入队列，然后出队列，左不为空，入左。右不为空，入右。
+
+    ```c++
+    class Solution {
+    public:
+        vector<vector<int> > Print(TreeNode* pRoot) {
+            vector<vector<int> > result;
+            if(pRoot == NULL)
+                return result;
+            queue<TreeNode*> q;
+            q.push(pRoot);
+            vector<int> v;
+            while(!q.empty())
+            {
+                size_t hi = q.size();
+                for(size_t i = 0; i < hi; i++)
+                { 
+                    TreeNode* tmp = q.front();
+                    q.pop();
+                    v.push_back(tmp->val);
+                    if(tmp->left)
+                        q.push(tmp->left);
+                    if(tmp->right)
+                        q.push(tmp->right);
+                }
+                result.push_back(v);
+                v.clear();
+            }
+            return result;
+        }
+    };
+    ```
+
+29. 二叉树中和为某一值的路径
+
+    思路：递归遍历树的左右子树。期望值改为原期望值减去当前节点值。
+
+    ```c++
+    class Solution
+    {
+    public:
+        vector<vector<int> > FindPath(TreeNode* root,int expectNumber) {
+            if(root)
+                isPath(root, expectNumber);
+            return result;
+        }
+    
+    private:
+        void isPath(TreeNode* node, int left)
+        {
+            tmp.push_back(node->val);
+            if(left - node->val == 0 && !node->left && !node->right)
+                result.push_back(tmp);
+            if(node->left)
+                isPath(node->left, left - node->val);
+            if(node->right)
+                isPath(node->right, left - node->val);
+            tmp.pop_back();
+        }
+    
+    private:
+        vector<vector<int> > result;
+        vector<int> tmp;
+    };
+    ```
+
+30. 二叉搜索树转化为排序的双向链表。
+
+    思路：中序遍历
+
+    ```c++
+    //递归版
+    class Solution {
+    public:
+        void _Convert(TreeNode* pRootOfTree)
+        {
+            if(pRootOfTree == NULL)
+                return;
+            _Convert(pRootOfTree->left);
+            v.push_back(pRootOfTree);
+            _Convert(pRootOfTree->right);
+        }
+        
+        TreeNode* Convert(TreeNode* pRootOfTree)
+        {
+            if(pRootOfTree == NULL)
+                return NULL;
+            _Convert(pRootOfTree);
+            TreeNode* root = v[0];
+            TreeNode* cur = root;
+            for(size_t i = 1; i < v.size(); i++)
+            {
+                cur->right = v[i];
+                v[i]->left = cur;
+                cur = cur->right;
+            }
+            return root;
+        }
+    private:
+        vector<TreeNode*> v;
+    };
+    
+    //非递归版
+    class Solution {
+    public:
+        TreeNode* Convert(TreeNode* pRootOfTree)
+        {
+            if(pRootOfTree == NULL)
+                return NULL;
+            stack<TreeNode*> s;
+            vector<TreeNode*> result;
+            while(!s.empty() || pRootOfTree != NULL)
+            {
+                if(pRootOfTree)
+                { 
+                    s.push(pRootOfTree);
+                    pRootOfTree = pRootOfTree->left;
+                }
+                else
+                {
+                    TreeNode* tmp = s.top();
+                    s.pop();
+                    result.push_back(tmp);
+                    pRootOfTree = tmp->right;
+                }
+            }
+            TreeNode* root = result[0];
+            TreeNode* cur = root;
+            for(size_t i = 1; i < result.size(); i++)
+            {
+                cur->right = result[i];
+                result[i]->left = cur;
+                cur = cur->right;
+            }
+            return root;
+        }
+    };
+    ```
+
+31. 和为sum的两个数字。存在多对，按乘积最小输出。
+
+    思路：头和尾两个指针 begin, end   离的越远乘积越小
+
+    array[begin] + array[end] == sum     找到
+
+    array[begin] + array[end] > sum        end--
+
+    array[begin] + array[end] < sum        begin++
+
+    ```C++
+    class Solution {
+    public:
+        vector<int> FindNumbersWithSum(vector<int> array,int sum) {
+            vector<int> result;
+            int size = array.size();
+            if(size < 2)
+                return result;
+            int begin = 0;
+            int end = size - 1;
+            while(begin < end)
+            {
+                if(array[begin]+array[end] == sum)
+                {
+                    result.push_back(array[begin]);
+                    result.push_back(array[end]);
+                    break;
+                }
+                else if(begin < size && array[begin]+array[end] < sum)
+                    begin++;
+                else if(end >= 0 && array[begin]+array[end] > sum)
+                    end--;
+            }
+            return result;
+        }
+    };
+    ```
+
+    32. 
